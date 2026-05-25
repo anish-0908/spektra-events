@@ -245,19 +245,79 @@ This project is licensed under the MIT License.
 
 For support, email your-email@example.com or open an issue on GitHub.
 
-## 🚀 Deployment
+## 🚀 Deployment to Vercel
 
-### Deploy to Vercel
+### Method 1: Deploy via Vercel Dashboard (Recommended)
+
+1. **Go to Vercel**
+   - Visit [vercel.com](https://vercel.com)
+   - Sign in with GitHub
+
+2. **Import Repository**
+   - Click "Add New" → "Project"
+   - Select your GitHub repository: `spektra-events`
+   - Click "Import"
+
+3. **Configure Project**
+   - Framework Preset: **Vite** (auto-detected)
+   - Build Command: `npm run build` (auto-filled)
+   - Output Directory: `dist` (auto-filled)
+   - Install Command: `npm install` (auto-filled)
+
+4. **Add Environment Variables**
+   - Click "Environment Variables"
+   - Add: `VITE_RAZORPAY_KEY_ID` = `rzp_test_SruNNZnrR4CYaq`
+   - Click "Add"
+
+5. **Deploy**
+   - Click "Deploy"
+   - Wait 2-3 minutes
+   - Your app is live! 🎉
+
+### Method 2: Deploy via Vercel CLI
+
 ```bash
-npm run build
-# Deploy dist folder to Vercel
+# Install Vercel CLI
+npm install -g vercel
+
+# Login to Vercel
+vercel login
+
+# Deploy
+vercel
+
+# Follow prompts:
+# - Set up and deploy? Yes
+# - Which scope? Your account
+# - Link to existing project? No
+# - Project name? spektra-events
+# - Directory? ./
+# - Override settings? No
+
+# Deploy to production
+vercel --prod
 ```
 
-### Deploy to Netlify
-```bash
-npm run build
-# Deploy dist folder to Netlify
-```
+### After Deployment
+
+1. **Get Your URL**
+   - Vercel will provide a URL like: `https://spektra-events.vercel.app`
+
+2. **Update GitHub Repository**
+   - Add the URL to your repository description
+   - Add it to the "Website" field in repository settings
+
+3. **Test Your Deployment**
+   - Visit the URL
+   - Test login, booking, and payment features
+   - Verify everything works
+
+### Automatic Deployments
+
+Once connected to GitHub:
+- ✅ Every push to `main` branch auto-deploys to production
+- ✅ Pull requests get preview deployments
+- ✅ Rollback to previous versions anytime
 
 ## 📝 Notes
 
@@ -267,7 +327,7 @@ npm run build
 
 ## 🎉 Demo
 
-Live demo: [Coming Soon]
+Live Demo: [https://spektra-events.vercel.app](https://spektra-events.vercel.app) (Deploy to get your URL)
 
 ---
 
