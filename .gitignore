@@ -1,0 +1,94 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+/build
+/dist
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+server/.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Misc
+.cache/
+.temp/
+.tmp/
+
+# Build files
+*.tsbuildinfo
+
+# Documentation files (exclude all except README.md)
+*.md
+!README.md
+*.txt
+PUSH_TO_GITHUB.md
+ADMIN_GUIDE.md
+ADMIN_SETUP_COMPLETE.md
+ALL_FIXES_COMPLETE.md
+CHANGES_SUMMARY.txt
+CITY_FILTERING_COMPLETE.md
+COMMANDS.txt
+COMPLETE_TEST_FLOW.md
+DEBUG_BLANK_PAGE.md
+EDIT_FEATURE_ADDED.md
+EVENTDETAIL_FIX.md
+FINAL_CHECKLIST.md
+FINAL_IMPLEMENTATION_STATUS.md
+FINAL_STATUS.md
+FIX_API_INTEGRATION.md
+HOW_TO_RUN.md
+HYBRID_DATA_COMPLETE.md
+IMPLEMENTATION_SUMMARY.md
+MIGRATION_COMPLETE.md
+QUICK_REFERENCE.md
+QUICK_REFERENCE.txt
+QUICK_START.md
+RAZORPAY_INTEGRATION_GUIDE.md
+README_FINAL.md
+SETUP.md
+SIMPLE_START.txt
+START_HERE.md
+START_HERE_NOW.md
+STATUS.md
+STATUS_COMPLETE.txt
+TEST_STEPS.md
+RAZORPAY_TEST_GUIDE.md
+RAZORPAY_COMPLETE.md
+PAYMENT_DIAGNOSTIC.md
+PAYMENT_QUICK_START.txt
+TEST_PAYMENT.md
+START_PAYMENT_TEST.md
+IMPLEMENTATION_COMPLETE.md
+README_PAYMENT.md
+FIXES_APPLIED.md
+BOTH_ISSUES_FIXED.txt
+HOW_TO_START.md
+START_HERE.txt

@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0a0a;
+  --card: #1a1a2e;
+  --accent: #f84464;
+  --text: #ffffff;
+  --muted: #a0a0a0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* subtle scrollbars (optional but premium) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(248, 68, 100, 0.35) rgba(255, 255, 255, 0.06);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(248, 68, 100, 0.35);
+  border-radius: 999px;
+}
+
+/* utility for premium glow */
+.ev-glow {
+  box-shadow:
+    0 0 0 1px rgba(248, 68, 100, 0.15),
+    0 12px 40px rgba(248, 68, 100, 0.16);
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
