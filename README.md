@@ -13,7 +13,7 @@ A modern, feature-rich event booking platform built with React, Vite, and Razorp
 - **Browse Events** - Movies, Concerts, Sports, Theatre, Comedy
 - **City-Based Filtering** - Events filtered by selected city
 - **Seat Selection** - Interactive seat map with categories (Premium, Gold, Silver)
-- **Razorpay Payment** - UPI, Card, and Wallet payments
+- **Simple Booking** - One-click booking confirmation
 - **Promo Codes** - Apply discount codes at checkout
 - **Booking History** - View all your past bookings
 - **Beautiful UI** - Modern dark theme with smooth animations
@@ -24,11 +24,10 @@ A modern, feature-rich event booking platform built with React, Vite, and Razorp
 - **Category Breakdown** - Visual charts for events by category
 - **City Distribution** - Track events across cities
 
-### 💳 Payment Integration
-- **Razorpay Test Mode** - Fully integrated payment gateway
-- **Multiple Payment Methods** - UPI, Card, Wallet
-- **Payment Verification** - Secure payment signature verification
-- **Ticket Generation** - Beautiful ticket cards after successful payment
+### 💳 Booking System
+- **Simple Checkout** - Easy one-click booking
+- **Booking Confirmation** - Instant confirmation
+- **Ticket Generation** - Beautiful ticket cards after booking
 
 ## � Quick Start
 
@@ -49,18 +48,12 @@ A modern, feature-rich event booking platform built with React, Vite, and Razorp
    npm install
    ```
 
-3. **Create .env file**
-   ```bash
-   # Create .env in project root
-   VITE_RAZORPAY_KEY_ID=rzp_test_SruNNZnrR4CYaq
-   ```
-
-4. **Start development server**
+3. **Start development server**
    ```bash
    npm run dev
    ```
 
-5. **Open browser**
+4. **Open browser**
    ```
    http://localhost:5173
    ```
@@ -81,24 +74,10 @@ Password: admin123
 
 ### Test Payment Credentials
 
-**UPI:**
-```
-UPI ID: success@razorpay
-```
-
-**Card:**
-```
-Card Number: 4111 1111 1111 1111
-Expiry: 12/27
-CVV: 123
-OTP: 1234
-```
-
-**Promo Codes:**
-```
-SPEKTRA10 - 10% off (max ₹300)
-EV50 - Flat ₹50 off
-```
+**Simple Booking:**
+- Just click "Confirm Booking" button
+- No payment gateway needed
+- Instant booking confirmation
 
 ## 📁 Project Structure
 
@@ -148,9 +127,6 @@ spektra-events/
 - **Framer Motion 12.38.0** - Animations
 - **Lucide React 1.14.0** - Icons
 
-### Payment
-- **Razorpay** - Payment gateway integration
-
 ### State Management
 - **React Context API** - Global state management
 - **localStorage** - Data persistence
@@ -178,7 +154,7 @@ npm run lint
 2. Selects event and views details
 3. Chooses showtime and seats
 4. Applies promo code (optional)
-5. Completes payment via Razorpay
+5. Confirms booking with one click
 6. Receives booking confirmation with ticket
 
 ### Admin Dashboard
@@ -188,10 +164,9 @@ npm run lint
 - Monitor category and city distribution
 
 ### Payment System
-- Razorpay integration with test mode
-- Support for UPI, Card, and Wallet payments
-- Payment signature verification
-- Automatic booking creation on successful payment
+- Simple one-click booking
+- Instant booking confirmation
+- Automatic ticket generation
 
 ## 🔒 Security
 
@@ -264,12 +239,7 @@ For support, email your-email@example.com or open an issue on GitHub.
    - Output Directory: `dist` (auto-filled)
    - Install Command: `npm install` (auto-filled)
 
-4. **Add Environment Variables**
-   - Click "Environment Variables"
-   - Add: `VITE_RAZORPAY_KEY_ID` = `rzp_test_SruNNZnrR4CYaq`
-   - Click "Add"
-
-5. **Deploy**
+4. **Deploy**
    - Click "Deploy"
    - Wait 2-3 minutes
    - Your app is live! 🎉

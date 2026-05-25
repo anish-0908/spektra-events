@@ -260,118 +260,63 @@ export default function Checkout() {
     return true
   }
 
-  // ── Razorpay payment flow ──────────────────────────────────────────────────
-  async function handlePayment() {
+  // ── Simple booking flow (no Razorpay) ─────────────────────────────────────
+  async function handleBooking() {
+    if (!user) {
+      navigate('/login')
+      return
+    }
+
     if (!validateInputs()) return
-
-    // Check if Razorpay is loaded
-    if (typeof window.Razorpay === 'undefined') {
-      setPayError('Razorpay is not loaded. Please refresh the page and try again.')
-      setPaying(false)
-      return
-    }
-
-    // Check if Key ID is configured
-    const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID
-    if (!razorpayKey) {
-      setPayError('Payment gateway not configured. Please contact support.')
-      setPaying(false)
-      return
-    }
 
     setPayError('')
     setPaying(true)
 
     try {
-      // Step 1: Create order on backend
-      const orderRes = await apiCreateOrder(grandTotal)
-      const order = orderRes.data.data
+      // Create booking directly
+      const verifyRes = await apiVerifyAndBook({
+        razorpay_order_id: 'order_' + Date.now(),
+        razorpay_payment_id: 'pay_' + Date.now(),
+        razorpay_signature: 'sig_' + Date.now(),
+        eventId: selectedEventId,
+        eventTitle: event?.title,
+        eventDate: selectedDate,
+        showtime: selectedTime,
+        venue: event?.venue,
+        city: city || event?.city,
+        seats: selectedSeats.length,
+        seatNumbers: selectedSeats.map(s => s.id),
+        category: selectedSeats[0]?.category || 'General',
+        totalAmount: grandTotal,
+        discount: discount,
+        finalAmount: grandTotal,
+        promoCode: promoApplied?.code || '',
+        paymentMethod: payment === 'upi' ? 'UPI' : payment === 'card' ? 'Card' : 'Wallet',
+      })
 
-      // Step 2: Build Razorpay options
-      const options = {
-        key: razorpayKey,
-        amount: order.amount,
-        currency: 'INR',
-        name: 'EventVerse',
-        description: event?.title || 'Event Ticket',
-        order_id: order.id,
-        prefill: {
-          name: user?.name || '',
-          email: user?.email || '',
-          contact: user?.phone || '',
-          // Pre-fill the UPI ID if user selected UPI
-          ...(payment === 'upi' && upiId ? { vpa: upiId } : {}),
-        },
-        method: payment === 'upi'    ? { upi: true }
-               : payment === 'card'   ? { card: true }
-               : payment === 'wallet' ? { wallet: true }
-               : {},
-        theme: { color: '#f84464' },
-
-        // Step 3: On payment success — verify on backend
-        handler: async (response) => {
-          try {
-            const verifyRes = await apiVerifyAndBook({
-              razorpay_order_id:   response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature:  response.razorpay_signature,
-              eventId:             selectedEventId,
-              eventTitle:          event?.title,
-              eventDate:           selectedDate,
-              showtime:            selectedTime,
-              venue:               event?.venue,
-              city:                city || event?.city,
-              seats:               selectedSeats.length,
-              seatNumbers:         selectedSeats.map(s => s.id),
-              category:            selectedSeats[0]?.category || 'General',
-              totalAmount:         grandTotal,
-              discount:            discount,
-              finalAmount:         grandTotal,
-              promoCode:           promoApplied?.code || '',
-              paymentMethod:       payment === 'upi' ? 'UPI' : payment === 'card' ? 'Card' : 'Wallet',
-            })
-
-            if (verifyRes.data.success) {
-              setTicket(verifyRes.data.ticket)
-              // Fire confetti
-              const rnd = () => Math.random()
-              setConfettiPieces(
-                Array.from({ length: 52 }, (_, i) => ({
-                  id: i,
-                  left:  `${rnd() * 100}%`,
-                  drift: (rnd() - 0.5) * 180,
-                  delay: rnd() * 0.35,
-                  dur:   1.8 + rnd() * 1.2,
-                  rot:   rnd() * 360,
-                  color: rnd() > 0.45 ? '#f84464' : rnd() > 0.5 ? '#ffffff' : '#fbbf24',
-                }))
-              )
-              setSuccess(true)
-            } else {
-              setPayError('Payment received but booking failed. Please contact support.')
-            }
-          } catch (err) {
-            console.error('Verification error:', err)
-            setPayError(err.response?.data?.message || 'Booking failed after payment. Contact support.')
-          } finally {
-            setPaying(false)
-          }
-        },
-
-        modal: {
-          ondismiss: () => {
-            console.log('Payment popup dismissed')
-            setPaying(false)
-          },
-        },
+      if (verifyRes.data.success) {
+        setTicket(verifyRes.data.ticket)
+        // Fire confetti
+        const rnd = () => Math.random()
+        setConfettiPieces(
+          Array.from({ length: 52 }, (_, i) => ({
+            id: i,
+            left: `${rnd() * 100}%`,
+            drift: (rnd() - 0.5) * 180,
+            delay: rnd() * 0.35,
+            dur: 1.8 + rnd() * 1.2,
+            rot: rnd() * 360,
+            color: rnd() > 0.45 ? '#f84464' : rnd() > 0.5 ? '#ffffff' : '#fbbf24',
+          }))
+        )
+        setSuccess(true)
+      } else {
+        setPayError('Booking failed. Please try again.')
       }
-
-      console.log('Opening Razorpay with options:', { ...options, key: '***' })
-      const rzp = new window.Razorpay(options)
-      rzp.open()
     } catch (err) {
-      console.error('Payment initiation error:', err)
-      setPayError(err.response?.data?.message || 'Could not initiate payment. Try again.')
+      console.error('Booking error:', err)
+      setPayError(err.response?.data?.message || 'Booking failed. Please try again.')
+    } finally {
       setPaying(false)
     }
   }
@@ -609,16 +554,16 @@ export default function Checkout() {
             <button
               id="pay-now-btn"
               type="button"
-              onClick={handlePayment}
+              onClick={handleBooking}
               disabled={paying}
               className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#f84464] py-4 text-sm font-semibold text-black transition hover:brightness-110 active:scale-[0.99] disabled:opacity-60"
             >
               <CheckCircle2 className="h-4 w-4" />
-              {paying ? 'Opening Razorpay…' : `Pay ₹${grandTotal}`}
+              {paying ? 'Processing...' : `Confirm Booking - ₹${grandTotal}`}
             </button>
 
             <p className="mt-3 text-center text-xs text-white/35">
-              🔒 Secured by Razorpay · 256-bit SSL encryption
+              🔒 Secure booking · Your data is safe
             </p>
           </div>
         </aside>
