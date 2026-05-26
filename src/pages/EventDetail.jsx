@@ -2,14 +2,19 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Clock, Globe, MapPin, Sparkles, Star } from 'lucide-react'
 import ShowtimeSelector from '../components/ShowtimeSelector.jsx'
+import ReviewSection from '../components/ReviewSection.jsx'
 import { events as mockEvents } from '../data/mockData.js'
 import { useBooking } from '../context/BookingContext.jsx'
 
-const MOCK_REVIEWS = [
-  { user: 'Aditi M.', rating: 9, text: 'Absolutely premium production — sound, visuals, pacing. Worth every rupee.' },
-  { user: 'Rohan K.', rating: 8, text: 'Crowd energy was insane. Booking flow felt smoother than most apps.' },
-  { user: 'Neha S.', rating: 9, text: 'Loved the venue layout intel in-app. Seats were exactly as shown.' },
-]
+function getLiveEvents() {
+  try {
+    const stored = JSON.parse(localStorage.getItem('ev_events') || '[]')
+    const adminEvents = stored.filter(e => String(e.id).startsWith('evt_'))
+    return [...adminEvents, ...mockEvents]
+  } catch {
+    return mockEvents
+  }
+}
 
 export default function EventDetail() {
   const { id } = useParams()
@@ -30,9 +35,8 @@ export default function EventDetail() {
   const [tab, setTab] = useState('about')
 
   useEffect(() => {
-    // Find event from mock data
-    const mockEvent = mockEvents.find(e => e.id === id)
-    setEvent(mockEvent || null)
+    const found = getLiveEvents().find(e => e.id === id)
+    setEvent(found || null)
     setLoading(false)
   }, [id])
 
@@ -155,19 +159,7 @@ export default function EventDetail() {
             </div>
           )}
           {tab === 'reviews' && (
-            <div className="space-y-4">
-              {MOCK_REVIEWS.map((r, i) => (
-                <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-semibold text-white">{r.user}</span>
-                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#f84464]">
-                      <Star className="h-4 w-4 fill-current" />{r.rating}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm text-white/65">{r.text}</p>
-                </div>
-              ))}
-            </div>
+            <ReviewSection eventId={event.id} eventTitle={event.title} />
           )}
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import HeroCarousel from '../components/HeroCarousel.jsx'
 import EventCard from '../components/EventCard.jsx'
-import { events as mockEvents } from '../data/mockData.js'
+import { useEvents } from '../hooks/useEvents.js'
 import { Flame } from 'lucide-react'
 import { useBooking } from '../context/BookingContext.jsx'
 
@@ -43,10 +43,11 @@ function HorizontalRow({ items }) {
 export default function Home() {
   const { city } = useBooking()
   const [tab, setTab] = useState('all')
+  const allEvents = useEvents()
 
   const inCity = useMemo(
-    () => mockEvents.filter((e) => !city || e.city === city),
-    [city],
+    () => allEvents.filter((e) => !city || e.city === city),
+    [allEvents, city],
   )
 
   const byCategory = useMemo(() => {

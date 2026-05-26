@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Search as SearchIcon } from 'lucide-react'
 import EventCard from '../components/EventCard.jsx'
-import { events as mockEvents } from '../data/mockData.js'
+import { useEvents } from '../hooks/useEvents.js'
 import { useBooking } from '../context/BookingContext.jsx'
 
 export default function Search() {
@@ -10,32 +10,23 @@ export default function Search() {
   const query = searchParams.get('q') ?? ''
   const [tab, setTab] = useState('all')
   const { city } = useBooking()
+  const allEvents = useEvents()
 
-  // Filter by search query and city
   const searchResults = useMemo(() => {
-    let results = mockEvents
-    
-    // Filter by city first
-    if (city) {
-      results = results.filter((e) => e.city === city)
-    }
-    
-    // Then filter by search query
+    let results = allEvents
+    if (city) results = results.filter((e) => e.city === city)
     if (!query.trim()) return results
-    
     const lowerQuery = query.toLowerCase()
-    return results.filter((e) => {
-      return (
-        e.title.toLowerCase().includes(lowerQuery) ||
-        e.category.toLowerCase().includes(lowerQuery) ||
-        (Array.isArray(e.genre) 
-          ? e.genre.some(g => g.toLowerCase().includes(lowerQuery))
-          : e.genre.toLowerCase().includes(lowerQuery)) ||
-        e.venue.toLowerCase().includes(lowerQuery) ||
-        e.city.toLowerCase().includes(lowerQuery)
-      )
-    })
-  }, [query, city])
+    return results.filter((e) =>
+      e.title.toLowerCase().includes(lowerQuery) ||
+      e.category.toLowerCase().includes(lowerQuery) ||
+      (Array.isArray(e.genre)
+        ? e.genre.some(g => g.toLowerCase().includes(lowerQuery))
+        : e.genre.toLowerCase().includes(lowerQuery)) ||
+      e.venue.toLowerCase().includes(lowerQuery) ||
+      e.city.toLowerCase().includes(lowerQuery)
+    )
+  }, [query, city, allEvents])
 
   const filtered = useMemo(() => {
     if (tab === 'all') return searchResults

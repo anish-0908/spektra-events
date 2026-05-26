@@ -140,6 +140,7 @@ export const apiCreateEvent = async (data) => {
   }
   events.unshift(newEvent)
   setStorageItem('ev_events', events)
+  window.dispatchEvent(new Event('ev_events_updated'))
   return { data: newEvent }
 }
 
@@ -147,12 +148,9 @@ export const apiUpdateEvent = async (id, data) => {
   const events = getStorageItem('ev_events', mockEvents)
   const idx = events.findIndex(e => String(e.id) === String(id) || String(e._id) === String(id))
   if (idx === -1) throw new Error('Event not found')
-  
-  events[idx] = {
-    ...events[idx],
-    ...data
-  }
+  events[idx] = { ...events[idx], ...data }
   setStorageItem('ev_events', events)
+  window.dispatchEvent(new Event('ev_events_updated'))
   return { data: events[idx] }
 }
 
@@ -160,6 +158,7 @@ export const apiDeleteEvent = async (id) => {
   const events = getStorageItem('ev_events', mockEvents)
   const filtered = events.filter(e => String(e.id) !== String(id) && String(e._id) !== String(id))
   setStorageItem('ev_events', filtered)
+  window.dispatchEvent(new Event('ev_events_updated'))
   return { data: { success: true } }
 }
 

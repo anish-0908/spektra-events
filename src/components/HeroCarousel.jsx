@@ -1,16 +1,16 @@
 import { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { events as mockEvents } from '../data/mockData.js'
+import { useEvents } from '../hooks/useEvents.js'
 
 export default function HeroCarousel() {
   const [idx, setIdx] = useState(0)
+  const allEvents = useEvents()
 
-  // Take top 5 events by rating from mock data
   const featured = useMemo(() => {
-    return mockEvents
+    return [...allEvents]
       .sort((a, b) => b.rating - a.rating)
       .slice(0, 5)
-  }, [])
+  }, [allEvents])
 
   useEffect(() => {
     if (featured.length === 0) return

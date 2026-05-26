@@ -4,7 +4,7 @@ import { SlidersHorizontal } from 'lucide-react'
 import FilterSidebar from '../components/FilterSidebar.jsx'
 import { defaultBrowseFilters } from '../constants/browseFilters.js'
 import EventCard from '../components/EventCard.jsx'
-import { events as mockEvents } from '../data/mockData.js'
+import { useEvents } from '../hooks/useEvents.js'
 import { useBooking } from '../context/BookingContext.jsx'
 
 const VALID = new Set(['movies', 'concerts', 'sports', 'theatre', 'comedy'])
@@ -15,18 +15,19 @@ export default function Browse() {
   const [filters, setFilters] = useState(() => defaultBrowseFilters())
   const [sortBy, setSortBy] = useState('popularity')
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const allEvents = useEvents()
 
   const cat = VALID.has(category) ? category : 'movies'
 
   const pool = useMemo(() => {
-    return mockEvents.filter((e) => {
+    return allEvents.filter((e) => {
       // Filter by category
       if (e.category !== cat) return false
       // Filter by city (if city is selected)
       if (city && e.city !== city) return false
       return true
     })
-  }, [cat, city])
+  }, [allEvents, cat, city])
 
   const genreOptions = useMemo(() => {
     const s = new Set()
